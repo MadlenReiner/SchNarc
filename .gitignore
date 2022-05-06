@@ -1,0 +1,3 @@
+**/__pycache__/
+*.pyc
+src/scripts/__pycache__/run_schnarc.cpython-37.pyc
