@@ -70,17 +70,24 @@ def read_dataset(path,numberofgeoms,filename):
             elif line.startswith("Grad"):
                 if int(line.split()[-1])==int(1):
                     _force = True
+                    property_list.append('gradients')
+                    property_list.append('has_gradients') 
                     property_list.append('forces')
                     property_list.append('has_forces')
             elif line.startswith("Given_grad"):
                 has_force=[]
+                has_gradient=[]
                 if int(line.split()[-1])==int(1):
                     _has_forces = True
                     has_force.append(1)
+                    has_gradient.append(0)
                     property_list.append('has_forces')
+                    property_list.append('has_gradient')
                 else:
                     has_force.append(0)
+                    has_gradient.append(0)
                 has_force=np.array(has_force)
+                has_gradient=np.array(has_gradient)
             elif line.startswith("NAC"):
                 if int(line.split()[-1])==int(1):
                     _nac = True
@@ -126,6 +133,7 @@ def read_dataset(path,numberofgeoms,filename):
                 soc=np.array(soc)
             elif line.startswith("! Gradient"):
                 n_grad = int(line.split()[2])
+                gradient = np.zeros((singlets+triplets+doublets+quartets,natom,3))
                 force = np.zeros((singlets+triplets+doublets+quartets,natom,3))
                 index = -1
                 gline = prop_file[iline+1].split()
@@ -172,6 +180,8 @@ def read_dataset(path,numberofgeoms,filename):
                         'socs'    : soc,
                         'forces'  : force,
                         'has_forces': has_force,
+                        'has_gradients' : has_gradient,
+                        'gradients' : gradient,
                         'nacs'    : nac,
                         'dipoles' : dipole,
                         'dyson'   : property_matrix }
